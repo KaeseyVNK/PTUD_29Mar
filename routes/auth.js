@@ -7,7 +7,7 @@ let constants = require('../utils/constants')
 let { check_authentication } = require('../utils/check_auth')
 let crypto = require('crypto')
 let mailer = require('../utils/mailer')
-let {SignUpValidator,LoginValidator,ChangePasswordValidator,validate} = require('../utils/validator')
+let {SignUpValidator,LoginValidator,ChangePasswordValidator,validate,checkEmailForgotPassword,checkPasswordReset} = require('../utils/validator')
 
 
 router.post('/signup',SignUpValidator,validate, async function (req, res, next) {
@@ -49,7 +49,7 @@ router.post('/change_password', check_authentication, ChangePasswordValidator, v
         }
     })
 
-router.post('/forgotpassword', async function (req, res, next) {
+router.post('/forgotpassword',checkEmailForgotPassword,validate, async function (req, res, next) {
     try {
         let email = req.body.email;
         let user = await userController.GetUserByEmail(email);
@@ -63,7 +63,7 @@ router.post('/forgotpassword', async function (req, res, next) {
         next(error)
     }
 })
-router.post('/resetpassword/:token', async function (req, res, next) {
+router.post('/resetpassword/:token',checkPasswordReset,validate, async function (req, res, next) {
     try {
         let token = req.params.token;
         let password = req.body.password;

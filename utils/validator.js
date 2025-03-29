@@ -62,5 +62,16 @@ module.exports = {
             options.password.minUppercase,
             options.password.minNumbers,
             options.password.minSymbols))
+    ],
+    checkEmailForgotPassword: [
+        body("email").isEmail().withMessage(constants.VALIDATOR_ERROR_EMAIL)
+    ],
+    checkPasswordReset: [
+        body("password").isStrongPassword(options.password).withMessage(util.format(constants.VALIDATOR_ERROR_PASSWORD,
+            options.password.minLength,
+            options.password.minLowercase,
+            options.password.minUppercase,
+            options.password.minNumbers,
+            options.password.minSymbols))
     ]
 }
